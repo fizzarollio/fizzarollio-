@@ -91,7 +91,8 @@ async function startAuth() {
   }
   showJoin(false);
   status('● СИНХРОНИЗАЦИЯ ВКЛЮЧЕНА');
-  await loadAll();
+  try { await loadAll(); }
+  catch (loadError) { console.error(loadError); status('ПРОФИЛЬ АКТИВЕН · НЕ ВСЕ ДАННЫЕ ЗАГРУЗИЛИСЬ', true); }
   subscribeRealtime();
 }
 
@@ -110,8 +111,12 @@ $('joinForm').addEventListener('submit', async (e) => {
     });
     if (error) throw error;
     if (data?.error) throw new Error(data.error);
-    await startAuth();
-    $('joinNotice').textContent = 'Добро пожаловать в команду SLAY!';
+    profile = { ...data.profile, user_id: user.id, is_active: true };
+    showJoin(false);
+    status('● ПРОФИЛЬ АКТИВЕН');
+    $('joinNotice').textContent = 'Добро пожаловать в команду SLAY! Аккаунт руководителя создан.';
+    try { await loadAll(); subscribeRealtime(); status('● СИНХРОНИЗАЦИЯ ВКЛЮЧЕНА'); }
+    catch (loadError) { console.error(loadError); status('АККАУНТ СОЗДАН · ОШИБКА ЗАГРУЗКИ ДАННЫХ', true); }
   } catch (err) {
     $('joinNotice').textContent = err.message || 'Не удалось присоединиться к команде.';
   } finally { button.disabled = false; }
