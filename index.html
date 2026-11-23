@@ -11,7 +11,8 @@
 @media(max-width:760px){.shell{padding:16px}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.hero .card{padding:20px}.stats{gap:18px}.tag{display:none}}@media(max-width:430px){.grid{grid-template-columns:1fr}.top{align-items:flex-start}.pill{font-size:10px}}
 </style></head>
 <body><main class="shell">
-<header class="top"><div class="brand"><div class="logo">S</div><span>SLAY</span></div><div class="pill">PRIVATE DANCE COMMUNITY</div></header>
+<header class="top"><div class="brand"><div class="logo">S</div><span>SLAY</span></div><div class="pill" id="connectionState">ПОДКЛЮЧЕНИЕ…</div></header>
+<section class="card join-card" id="joinCard"><div class="eyebrow">MEMBER ACCESS</div><h2 style="margin:8px 0">Войти в команду SLAY</h2><p class="muted">Введи приглашение от руководителя команды. После активации данные будут общими для участников.</p><form class="form" id="joinForm"><input id="joinNickname" placeholder="Твой никнейм" minlength="2" maxlength="24" required><input id="joinCode" placeholder="Код приглашения" maxlength="128" required><textarea id="joinBio" placeholder="Пара слов о себе (необязательно)" rows="2" maxlength="240"></textarea><button class="btn">Вступить в SLAY</button></form><p class="notice" id="joinNotice" role="status"></p></section>
 <section class="hero"><div class="card"><div class="eyebrow">OUR STAGE · OUR RULES</div><h1>MOVE<br><span class="gradient">AS ONE.</span></h1><p>Закрытое пространство команды SLAY: репетиции, выступления, идеи и всё, что создаёт нашу историю.</p><div class="stats"><div><b>01</b><span>CREW</span></div><div><b>∞</b><span>ENERGY</span></div><div><b>100%</b><span>SLAY</span></div></div></div>
 <div class="card"><div class="eyebrow">NEXT UP</div><h2 style="font-size:27px;margin:12px 0 4px">Следующая репетиция</h2><p class="muted">Добавь расписание команды в общий календарь.</p><div class="event"><div class="date">25<small>NOV</small></div><div><strong>Choreo practice</strong><div class="muted">18:30 — 20:30 · Studio A</div></div><span class="tag">REHEARSAL</span></div><div class="event"><div class="date">29<small>NOV</small></div><div><strong>Video shoot</strong><div class="muted">15:00 — 17:00 · Main studio</div></div><span class="tag">CONTENT</span></div></div></section>
 <nav class="nav" aria-label="Разделы"><button class="active" data-tab="home">Главная</button><button data-tab="schedule">Расписание</button><button data-tab="dances">Танцы</button><button data-tab="ideas">Идеи</button><button data-tab="chat">Чат</button><button data-tab="members">Участники</button></nav>
@@ -19,13 +20,219 @@
 <section id="schedule" class="content"><div class="section-head"><h2>Расписание</h2><span class="muted">NOVEMBER</span></div><div class="card"><div class="event"><div class="date">25<small>NOV</small></div><div><strong>Choreo practice</strong><div class="muted">18:30 — 20:30 · Studio A</div></div><span class="tag">REHEARSAL</span></div><div class="event"><div class="date">29<small>NOV</small></div><div><strong>Video shoot</strong><div class="muted">15:00 — 17:00 · Main studio</div></div><span class="tag">CONTENT</span></div></div></section>
 <section id="dances" class="content"><div class="section-head"><h2>Dance library</h2><span class="muted">CURRENT SET</span></div><div class="grid"><article class="tile"><div class="eyebrow">PERFORMED</div><h3>Pink Venom</h3><p>BLACKPINK</p></article><article class="tile"><div class="eyebrow">LEARNING</div><h3>Drama</h3><p>aespa</p></article><article class="tile"><div class="eyebrow">CURRENT</div><h3>Supernova</h3><p>aespa</p></article></div></section>
 <section id="ideas" class="content"><div class="section-head"><h2>Идеи команды</h2><span class="muted">ДОБАВЬ СВОЮ</span></div><div class="card"><form class="form" id="ideaForm"><input id="ideaInput" placeholder="Предложи идею..." maxlength="140" required><button class="btn">Добавить идею</button></form><div id="ideasList"><div class="idea">New dance cover for December <button aria-label="Голосовать">♡ 0</button></div><div class="idea">Matching silver stage outfits <button aria-label="Голосовать">♡ 0</button></div></div></div></section>
-<section id="chat" class="content"><div class="section-head"><h2>Общий чат</h2><span class="muted">LOCAL PREVIEW</span></div><div class="card"><div class="chatbox" id="chatbox"><div class="bubble">Welcome to our space. Keep it iconic ✨</div><div class="bubble">New rehearsal details are up!</div></div><form class="form" id="chatForm" style="max-width:none;grid-template-columns:1fr auto;margin-top:12px"><input id="chatInput" placeholder="Написать сообщение..." required><button class="btn">Отправить</button></form></div></section>
-<section id="members" class="content"><div class="section-head"><h2>Участники</h2><span class="muted">CREW SPACE</span></div><div class="card"><div class="eyebrow">YOUR PROFILE</div><form class="form" id="profileForm"><input id="nickname" placeholder="Твой никнейм" maxlength="32" required><textarea id="bio" placeholder="Пара слов о себе" rows="3"></textarea><button class="btn">Сохранить локальный профиль</button></form><p class="notice" id="profileNotice">Профиль в этом демо сохраняется только в браузере.</p></div></section>
-<div class="footer">SLAY · OUR DANCE, OUR WORLD</div></main>
-<script>
-const tabs=[...document.querySelectorAll('[data-tab]')];tabs.forEach(b=>b.addEventListener('click',()=>{tabs.forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.content').forEach(s=>s.classList.toggle('active',s.id===b.dataset.tab));}));
-const ideas=JSON.parse(localStorage.getItem('slay-ideas')||'[]');const list=document.getElementById('ideasList');function drawIdeas(){list.innerHTML='';[...['New dance cover for December','Matching silver stage outfits'],...ideas].forEach((v,i)=>{const d=document.createElement('div');d.className='idea';const s=document.createElement('span');s.textContent=v;const btn=document.createElement('button');btn.textContent='♡ 0';btn.onclick=()=>{btn.textContent=btn.textContent==='♡ 0'?'♥ 1':'♡ 0'};d.append(s,btn);list.append(d)})}drawIdeas();document.getElementById('ideaForm').onsubmit=e=>{e.preventDefault();ideas.push(document.getElementById('ideaInput').value.trim());localStorage.setItem('slay-ideas',JSON.stringify(ideas));document.getElementById('ideaInput').value='';drawIdeas()};
-document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();const v=document.getElementById('chatInput');const d=document.createElement('div');d.className='bubble me';d.textContent=v.value;document.getElementById('chatbox').append(d);v.value='';d.scrollIntoView({block:'nearest'})};
-const profile=JSON.parse(localStorage.getItem('slay-profile')||'{}');document.getElementById('nickname').value=profile.nickname||'';document.getElementById('bio').value=profile.bio||'';document.getElementById('profileForm').onsubmit=e=>{e.preventDefault();localStorage.setItem('slay-profile',JSON.stringify({nickname:document.getElementById('nickname').value,bio:document.getElementById('bio').value}));document.getElementById('profileNotice').textContent='Профиль сохранён на этом устройстве.'};
+<section id="chat" class="content"><div class="section-head"><h2>Общий чат</h2><span class="muted">LIVE CHAT</span></div><div class="card"><div class="chatbox" id="chatbox"><div class="bubble">Welcome to our space. Keep it iconic ✨</div><div class="bubble">New rehearsal details are up!</div></div><form class="form" id="chatForm" style="max-width:none;grid-template-columns:1fr auto;margin-top:12px"><input id="chatInput" placeholder="Написать сообщение..." required><button class="btn">Отправить</button></form></div></section>
+<section id="members" class="content"><div class="section-head"><h2>Участники</h2><span class="muted">CREW SPACE</span></div><div class="card"><div class="eyebrow">YOUR PROFILE</div><form class="form" id="profileForm"><input id="nickname" placeholder="Твой никнейм" maxlength="32" required><textarea id="bio" placeholder="Пара слов о себе" rows="3"></textarea><button class="btn">Сохранить профиль</button></form><p class="notice" id="profileNotice" role="status"></p></div></section>
+<div class="footer">SLAY · OUR DANCE, OUR WORLD · ОБЩИЕ ДАННЫЕ В РЕАЛЬНОМ ВРЕМЕНИ</div></main>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.0/+esm';
+
+const SUPABASE_URL = 'https://lugibrfgpctomgbmsfqi.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_FS_Vf4yYrQpXE4oxF8TVyg_sLhjtEPr';
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+let user = null;
+let profile = null;
+let liveChannel = null;
+
+const $ = (id) => document.getElementById(id);
+const status = (message, bad=false) => {
+  $('connectionState').textContent = message;
+  $('connectionState').style.color = bad ? '#ff9bbd' : '#b8f7cf';
+};
+const escapeText = (value) => String(value ?? '');
+const showJoin = (show) => { $('joinCard').style.display = show ? 'block' : 'none'; };
+
+async function startAuth() {
+  status('ПОДКЛЮЧАЕМСЯ…');
+  let { data: { session }, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  if (!session) {
+    const result = await supabase.auth.signInAnonymously();
+    if (result.error) throw result.error;
+    session = result.data.session;
+  }
+  user = session.user;
+  const result = await supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle();
+  if (result.error) throw result.error;
+  profile = result.data;
+  if (!profile || !profile.is_active) {
+    showJoin(true);
+    status('НУЖНО ПРИГЛАШЕНИЕ');
+    return;
+  }
+  showJoin(false);
+  status('● СИНХРОНИЗАЦИЯ ВКЛЮЧЕНА');
+  await loadAll();
+  subscribeRealtime();
+}
+
+$('joinForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const button = $('joinForm').querySelector('button');
+  button.disabled = true;
+  $('joinNotice').textContent = 'Проверяем приглашение…';
+  try {
+    const { data, error } = await supabase.functions.invoke('activate-member', {
+      body: {
+        nickname: $('joinNickname').value.trim(),
+        code: $('joinCode').value.trim(),
+        bio: $('joinBio').value.trim()
+      }
+    });
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+    await startAuth();
+    $('joinNotice').textContent = 'Добро пожаловать в SLAY!';
+  } catch (err) {
+    $('joinNotice').textContent = err.message || 'Не удалось активировать профиль.';
+  } finally { button.disabled = false; }
+});
+
+function renderEvents(rows) {
+  const host = document.querySelector('#schedule .card');
+  if (!host) return;
+  host.innerHTML = '';
+  if (!rows.length) { host.textContent = 'Пока нет запланированных событий.'; return; }
+  rows.forEach(row => {
+    const date = new Date(row.starts_at);
+    const d = document.createElement('div'); d.className = 'event';
+    const stamp = document.createElement('div'); stamp.className = 'date';
+    stamp.innerHTML = '<b></b><small></small>';
+    stamp.querySelector('b').textContent = String(date.getDate()).padStart(2,'0');
+    stamp.querySelector('small').textContent = date.toLocaleString('ru-RU',{month:'short'}).replace('.','').toUpperCase();
+    const info = document.createElement('div');
+    const title = document.createElement('strong'); title.textContent = row.title;
+    const detail = document.createElement('div'); detail.className = 'muted';
+    detail.textContent = date.toLocaleString('ru-RU',{hour:'2-digit',minute:'2-digit'}) + (row.location ? ' · '+row.location : '') + (row.details ? ' · '+row.details : '');
+    info.append(title,detail); d.append(stamp,info); host.append(d);
+  });
+}
+function renderDances(rows) {
+  const host = document.querySelector('#dances .grid');
+  host.innerHTML = '';
+  if (!rows.length) { host.textContent = 'Пока нет добавленных танцев.'; return; }
+  rows.forEach(row => {
+    const card=document.createElement('article');card.className='tile';
+    const tag=document.createElement('div');tag.className='eyebrow';tag.textContent='DANCE';
+    const title=document.createElement('h3');title.textContent=row.title;
+    const artist=document.createElement('p');artist.textContent=row.artist||row.notes||'';
+    card.append(tag,title,artist);
+    if(row.music_url){const a=document.createElement('a');a.href=row.music_url;a.target='_blank';a.rel='noopener';a.textContent='Открыть видео / музыку';a.style.color='var(--pink)';card.append(a)}
+    host.append(card);
+  });
+}
+function renderIdeas(rows, votes) {
+  const list=$('ideasList'); list.innerHTML='';
+  if(!rows.length){list.textContent='Пока нет идей. Добавь первую!';return}
+  rows.forEach(row=>{
+    const voteRows=votes.filter(v=>v.idea_id===row.id);
+    const count=voteRows.reduce((sum,v)=>sum+(v.vote||0),0);
+    const mine=voteRows.some(v=>v.user_id===user.id);
+    const item=document.createElement('div');item.className='idea';
+    const text=document.createElement('div');
+    const title=document.createElement('strong');title.textContent=row.title;
+    const body=document.createElement('div');body.className='muted';body.textContent=row.body||'';
+    text.append(title,body);
+    const btn=document.createElement('button');btn.textContent=(mine?'♥ ':'♡ ')+count;btn.setAttribute('aria-label','Голосовать за идею');
+    btn.addEventListener('click',async()=>{
+      btn.disabled=true;
+      try{
+        if(mine) await supabase.from('idea_votes').delete().eq('idea_id',row.id).eq('user_id',user.id);
+        else await supabase.from('idea_votes').insert({idea_id:row.id,user_id:user.id,vote:1});
+      }catch(e){console.error(e)}
+      await loadIdeas();
+    });
+    item.append(text,btn);list.append(item);
+  });
+}
+async function loadIdeas(){
+  const [{data:ideas,error:ie},{data:votes,error:ve}]=await Promise.all([
+    supabase.from('ideas').select('id,title,body,anonymous,created_by,created_at').order('created_at',{ascending:false}),
+    supabase.from('idea_votes').select('idea_id,user_id,vote')
+  ]);
+  if(ie) throw ie;if(ve) throw ve;renderIdeas(ideas||[],votes||[]);
+}
+async function loadChat(){
+  const {data:messages,error}=await supabase.from('messages').select('id,user_id,body,created_at').order('created_at',{ascending:true}).limit(100);
+  if(error) throw error;
+  const ids=[...new Set((messages||[]).map(m=>m.user_id))];
+  let people=[];
+  if(ids.length){const p=await supabase.from('profiles').select('user_id,nickname').in('user_id',ids);if(p.error)throw p.error;people=p.data||[]}
+  const names=new Map(people.map(p=>[p.user_id,p.nickname]));
+  const box=$('chatbox');box.innerHTML='';
+  (messages||[]).forEach(m=>{
+    const b=document.createElement('div');b.className='bubble'+(m.user_id===user.id?' me':'');
+    const who=document.createElement('strong');who.textContent=(names.get(m.user_id)||'Участник')+' · ';
+    const msg=document.createElement('span');msg.textContent=m.body;
+    const time=document.createElement('small');time.className='muted';time.textContent=' '+new Date(m.created_at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+    b.append(who,msg,time);box.append(b);
+  });
+  box.scrollTop=box.scrollHeight;
+}
+async function loadMembers(){
+  const {data,error}=await supabase.from('profiles').select('user_id,nickname,bio,role').eq('is_active',true).order('created_at');
+  if(error) throw error;
+  const host=document.querySelector('#members .card');
+  const form=$('profileForm');
+  host.querySelectorAll('.member-list').forEach(x=>x.remove());
+  const list=document.createElement('div');list.className='member-list';list.style.marginTop='22px';
+  const h=document.createElement('h3');h.textContent='Команда';list.append(h);
+  (data||[]).forEach(p=>{const row=document.createElement('div');row.className='event';const name=document.createElement('strong');name.textContent=p.nickname+(p.role==='leader'?' · LEADER':'');const bio=document.createElement('div');bio.className='muted';bio.textContent=p.bio||'Участник SLAY';row.append(name,bio);list.append(row)});
+  form.after(list);
+  if(profile){$('nickname').value=profile.nickname||'';$('bio').value=profile.bio||''}
+}
+async function loadAll(){
+  const results=await Promise.all([
+    supabase.from('events').select('id,title,details,location,starts_at,ends_at').order('starts_at'),
+    supabase.from('dances').select('id,title,artist,music_url,notes,first_performance_at').order('created_at',{ascending:false}),
+    supabase.from('announcements').select('id,title,body,pinned,created_at').order('created_at',{ascending:false}),
+    loadIdeas(),loadChat(),loadMembers()
+  ]);
+  if(results[0].error)throw results[0].error;
+  if(results[1].error)throw results[1].error;
+  renderEvents(results[0].data||[]);renderDances(results[1].data||[]);
+  const announce=results[2].data||[];
+  const home=document.querySelector('#home .section-head');
+  if(announce.length){
+    document.getElementById('announcementBlock')?.remove();
+    const block=document.createElement('div');block.id='announcementBlock';block.className='card';block.style.marginTop='14px';
+    const title=document.createElement('h3');title.textContent='Объявления';block.append(title);
+    announce.forEach(a=>{const item=document.createElement('p');item.textContent=a.title+': '+a.body;block.append(item)});
+    home.after(block);
+  }
+}
+function subscribeRealtime(){
+  if(liveChannel) supabase.removeChannel(liveChannel);
+  liveChannel=supabase.channel('slay-shared-data')
+    .on('postgres_changes',{event:'*',schema:'public',table:'events'},()=>loadAll().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'dances'},()=>loadAll().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'announcements'},()=>loadAll().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'ideas'},()=>loadIdeas().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'idea_votes'},()=>loadIdeas().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'messages'},()=>loadChat().catch(console.error))
+    .on('postgres_changes',{event:'*',schema:'public',table:'profiles'},()=>loadMembers().catch(console.error))
+    .subscribe((state)=>{if(state==='SUBSCRIBED')status('● СИНХРОНИЗАЦИЯ ВКЛЮЧЕНА')});
+}
+$('ideaForm').addEventListener('submit',async e=>{
+  e.preventDefault();const input=$('ideaInput');const value=input.value.trim();if(!value)return;
+  const {error}=await supabase.from('ideas').insert({title:value,body:'',created_by:user.id,anonymous:false});
+  if(error){alert('Не удалось добавить идею: '+error.message);return}input.value='';await loadIdeas();
+});
+$('chatForm').addEventListener('submit',async e=>{
+  e.preventDefault();const input=$('chatInput');const body=input.value.trim();if(!body)return;
+  const button=$('chatForm').querySelector('button');button.disabled=true;
+  const {error}=await supabase.from('messages').insert({user_id:user.id,body});
+  button.disabled=false;
+  if(error){alert('Не удалось отправить сообщение: '+error.message);return}input.value='';await loadChat();
+});
+$('profileForm').addEventListener('submit',async e=>{
+  e.preventDefault();const nickname=$('nickname').value.trim();const bio=$('bio').value.trim();
+  const {error}=await supabase.from('profiles').update({nickname,bio,updated_at:new Date().toISOString()}).eq('user_id',user.id);
+  $('profileNotice').textContent=error?'Ошибка: '+error.message:'Профиль обновлён для всей команды.';
+  if(!error){profile={...profile,nickname,bio};await loadMembers()}
+});
+supabase.auth.onAuthStateChange((event,session)=>{
+  if(event==='SIGNED_OUT'){user=null;profile=null;showJoin(true);status('НУЖНО ВОЙТИ')}
+});
+startAuth().catch(err=>{console.error(err);status('ОШИБКА ПОДКЛЮЧЕНИЯ',true);$('joinNotice').textContent=err.message||'Не удалось подключиться к серверу.';showJoin(true)});
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script></body></html>
